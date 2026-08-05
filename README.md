@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # LZ ClientFlow
 
 **Client and Project Management Application for LZ Solutions**
@@ -471,3 +472,7 @@ Created as a code sample for technical interviews and fellowship applications.
 **Last Updated**: March 2024  
 **Version**: 1.0.0  
 **Status**: Complete and ready for deployment
+=======
+# lz-clientflow
+A client and project management web application for small digital businesses.
+>>>>>>> 645ae09b044e376b0d9ffe5bd04df68be5176b6e
