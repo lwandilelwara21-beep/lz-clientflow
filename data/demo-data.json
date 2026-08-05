@@ -1,0 +1,243 @@
+{
+  "clients": [
+    {
+      "id": "demo-client-1",
+      "fullName": "Sarah Thompson",
+      "businessName": "Thompson & Associates",
+      "email": "sarah@thompson.co.za",
+      "phone": "+27 11 234 5678",
+      "whatsapp": "+27 82 123 4567",
+      "location": "Johannesburg",
+      "preferredContact": "Email",
+      "dateAdded": "2024-01-15T10:30:00Z",
+      "notes": "Legal services firm. Quick decision maker. Prefers detailed project timelines."
+    },
+    {
+      "id": "demo-client-2",
+      "fullName": "James Mthembu",
+      "businessName": "Mthembu Retail Solutions",
+      "email": "james@mthemburetail.com",
+      "phone": "+27 21 555 8901",
+      "whatsapp": "+27 83 456 7890",
+      "location": "Cape Town",
+      "preferredContact": "WhatsApp",
+      "dateAdded": "2024-02-01T14:15:00Z",
+      "notes": "E-commerce business owner. Budget-conscious. Likes frequent check-ins via messaging."
+    },
+    {
+      "id": "demo-client-3",
+      "fullName": "Rachel De Villiers",
+      "businessName": "Wellness By Rachel",
+      "email": "rachel@wellnessbyrachel.co.za",
+      "phone": "+27 31 777 2233",
+      "whatsapp": "+27 81 777 2233",
+      "location": "Durban",
+      "preferredContact": "Phone",
+      "dateAdded": "2024-02-20T09:00:00Z",
+      "notes": "Wellness consultant. Medium budget. Wants a modern, clean aesthetic."
+    },
+    {
+      "id": "demo-client-4",
+      "fullName": "Michael Chen",
+      "businessName": "Chen Tech Innovations",
+      "email": "michael@chentech.com",
+      "phone": "+27 12 888 9012",
+      "whatsapp": "+27 71 888 9012",
+      "location": "Pretoria",
+      "preferredContact": "Email",
+      "dateAdded": "2024-03-05T11:20:00Z",
+      "notes": "Tech startup. High budget. Complex requirements. Needs custom integrations."
+    }
+  ],
+  "projects": [
+    {
+      "id": "demo-project-1",
+      "clientId": "demo-client-1",
+      "projectName": "Thompson & Associates Website Redesign",
+      "type": "Website Redesign",
+      "package": "Advanced Business Website — R4 500",
+      "description": "Complete redesign of existing legal services website with improved UX and new branding",
+      "startDate": "2024-01-20T00:00:00Z",
+      "dueDate": "2024-04-15T00:00:00Z",
+      "status": "Development",
+      "progress": 65,
+      "totalPrice": 4500,
+      "depositRequired": 2250,
+      "depositReceived": 2250,
+      "outstandingBalance": 2250,
+      "paymentStatus": "Deposit Paid",
+      "priority": "High",
+      "milestones": [
+        { "name": "Design mockups approved", "date": "2024-02-15", "completed": true },
+        { "name": "Development started", "date": "2024-02-20", "completed": true },
+        { "name": "Testing phase", "date": "2024-04-01", "completed": false },
+        { "name": "Launch", "date": "2024-04-15", "completed": false }
+      ],
+      "notes": "Client satisfied with design direction. Ready to move to development phase.",
+      "createdDate": "2024-01-15T10:30:00Z",
+      "updatedDate": "2024-03-20T15:45:00Z"
+    },
+    {
+      "id": "demo-project-2",
+      "clientId": "demo-client-2",
+      "projectName": "Mthembu Retail E-commerce Platform",
+      "type": "E-commerce Website",
+      "package": "Premium Digital Solutions — Starting from R6 000",
+      "description": "Full e-commerce platform with inventory management, payment gateway integration, and admin dashboard",
+      "startDate": "2024-02-01T00:00:00Z",
+      "dueDate": "2024-05-30T00:00:00Z",
+      "status": "Design",
+      "progress": 35,
+      "totalPrice": 7500,
+      "depositRequired": 3750,
+      "depositReceived": 3750,
+      "outstandingBalance": 3750,
+      "paymentStatus": "Deposit Paid",
+      "priority": "Urgent",
+      "milestones": [
+        { "name": "Requirements gathering", "date": "2024-02-05", "completed": true },
+        { "name": "Design approved", "date": "2024-03-15", "completed": false },
+        { "name": "Development starts", "date": "2024-03-20", "completed": false },
+        { "name": "Testing and QA", "date": "2024-05-15", "completed": false },
+        { "name": "Launch", "date": "2024-05-30", "completed": false }
+      ],
+      "notes": "Client wants shopping cart and product filters working by mid-April. Some urgency here.",
+      "createdDate": "2024-02-01T14:15:00Z",
+      "updatedDate": "2024-03-18T10:20:00Z"
+    },
+    {
+      "id": "demo-project-3",
+      "clientId": "demo-client-3",
+      "projectName": "Wellness By Rachel Landing Page",
+      "type": "Landing Page",
+      "package": "Starter Website — R3 500",
+      "description": "Professional landing page with service descriptions, testimonials, and contact form",
+      "startDate": "2024-02-20T00:00:00Z",
+      "dueDate": "2024-03-30T00:00:00Z",
+      "status": "Client Review",
+      "progress": 90,
+      "totalPrice": 3500,
+      "depositRequired": 1750,
+      "depositReceived": 1750,
+      "outstandingBalance": 1750,
+      "paymentStatus": "Deposit Paid",
+      "priority": "Medium",
+      "milestones": [
+        { "name": "Design mockups", "date": "2024-02-25", "completed": true },
+        { "name": "Development", "date": "2024-03-15", "completed": true },
+        { "name": "Client review", "date": "2024-03-25", "completed": true },
+        { "name": "Final revisions", "date": "2024-03-28", "completed": false },
+        { "name": "Launch", "date": "2024-03-30", "completed": false }
+      ],
+      "notes": "Waiting for client feedback on design. Minor tweaks expected.",
+      "createdDate": "2024-02-20T09:00:00Z",
+      "updatedDate": "2024-03-22T16:30:00Z"
+    },
+    {
+      "id": "demo-project-4",
+      "clientId": "demo-client-4",
+      "projectName": "Chen Tech API Integration & Custom Dashboard",
+      "type": "Custom Project",
+      "package": "Custom Quotation",
+      "description": "Custom integration of third-party APIs with proprietary dashboard and real-time analytics",
+      "startDate": "2024-03-01T00:00:00Z",
+      "dueDate": "2024-06-30T00:00:00Z",
+      "status": "Planning",
+      "progress": 15,
+      "totalPrice": 12000,
+      "depositRequired": 6000,
+      "depositReceived": 6000,
+      "outstandingBalance": 6000,
+      "paymentStatus": "Deposit Paid",
+      "priority": "Urgent",
+      "milestones": [
+        { "name": "Technical specification", "date": "2024-03-15", "completed": true },
+        { "name": "API architecture design", "date": "2024-04-01", "completed": false },
+        { "name": "Core development", "date": "2024-05-15", "completed": false },
+        { "name": "Testing and optimization", "date": "2024-06-15", "completed": false },
+        { "name": "Deployment and training", "date": "2024-06-30", "completed": false }
+      ],
+      "notes": "Complex project. Multiple integrations required. Client wants monthly progress reviews.",
+      "createdDate": "2024-03-05T11:20:00Z",
+      "updatedDate": "2024-03-20T13:00:00Z"
+    },
+    {
+      "id": "demo-project-5",
+      "clientId": "demo-client-1",
+      "projectName": "Thompson & Associates Maintenance Plan",
+      "type": "Maintenance",
+      "package": "Starter Website — R3 500",
+      "description": "Annual website maintenance including updates, security patches, and bug fixes",
+      "startDate": "2024-01-01T00:00:00Z",
+      "dueDate": "2024-12-31T00:00:00Z",
+      "status": "Completed",
+      "progress": 100,
+      "totalPrice": 3500,
+      "depositRequired": 3500,
+      "depositReceived": 3500,
+      "outstandingBalance": 0,
+      "paymentStatus": "Paid in Full",
+      "priority": "Medium",
+      "milestones": [
+        { "name": "Contract signed", "date": "2024-01-01", "completed": true },
+        { "name": "Monthly check-ins", "date": "2024-02-01", "completed": true },
+        { "name": "Security updates", "date": "2024-03-01", "completed": true }
+      ],
+      "notes": "On-going maintenance. Client satisfied with service.",
+      "createdDate": "2024-01-01T08:00:00Z",
+      "updatedDate": "2024-03-20T10:00:00Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "demo-payment-1",
+      "projectId": "demo-project-1",
+      "amount": 2250,
+      "date": "2024-02-15T10:30:00Z",
+      "method": "Bank Transfer",
+      "reference": "REF-001",
+      "note": "Deposit payment",
+      "createdDate": "2024-02-15T10:30:00Z"
+    },
+    {
+      "id": "demo-payment-2",
+      "projectId": "demo-project-2",
+      "amount": 3750,
+      "date": "2024-02-10T14:00:00Z",
+      "method": "Bank Transfer",
+      "reference": "REF-002",
+      "note": "Deposit payment",
+      "createdDate": "2024-02-10T14:00:00Z"
+    },
+    {
+      "id": "demo-payment-3",
+      "projectId": "demo-project-3",
+      "amount": 1750,
+      "date": "2024-02-28T11:20:00Z",
+      "method": "Card",
+      "reference": "CARD-003",
+      "note": "Deposit payment via card",
+      "createdDate": "2024-02-28T11:20:00Z"
+    },
+    {
+      "id": "demo-payment-4",
+      "projectId": "demo-project-4",
+      "amount": 6000,
+      "date": "2024-03-10T09:15:00Z",
+      "method": "Bank Transfer",
+      "reference": "REF-004",
+      "note": "Deposit payment",
+      "createdDate": "2024-03-10T09:15:00Z"
+    },
+    {
+      "id": "demo-payment-5",
+      "projectId": "demo-project-5",
+      "amount": 3500,
+      "date": "2024-01-05T10:00:00Z",
+      "method": "Bank Transfer",
+      "reference": "REF-005",
+      "note": "Annual maintenance contract payment",
+      "createdDate": "2024-01-05T10:00:00Z"
+    }
+  ]
+}

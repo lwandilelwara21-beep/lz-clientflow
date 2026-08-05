@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LZ ClientFlow - Client and Project Management Application for LZ Solutions">
+  <title>LZ ClientFlow - Client & Project Management</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/layout.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/responsive.css">
+
+  <style>
+    /* Inline styles for initial theme setup */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar Navigation -->
+    <aside>
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <span>💼</span>
+          <span>LZ ClientFlow</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-label">Main</div>
+          <button class="nav-item active" data-view="dashboard">📊 Dashboard</button>
+          <button class="nav-item" data-view="clients">👥 Clients</button>
+          <button class="nav-item" data-view="projects">📁 Projects</button>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-label">Management</div>
+          <button class="nav-item" data-view="payments">💰 Payments</button>
+          <button class="nav-item" data-view="calendar">📅 Deadlines</button>
+          <button class="nav-item" data-view="reports">📈 Reports</button>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-label">System</div>
+          <button class="nav-item" data-view="settings">⚙️ Settings</button>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main role="main" aria-label="Main content">
+      <!-- Views will be rendered here by JavaScript -->
+    </main>
+
+    <!-- Mobile Navigation Toggle -->
+    <button class="sidebar-toggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+  </div>
+
+  <!-- File input for imports (hidden) -->
+  <input type="file" id="import-file-input" accept=".json" style="display: none;">
+
+  <!-- JavaScript Modules -->
+  <script type="module">
+    import { initApp } from './js/app.js';
+
+    // Initialize application when DOM is ready
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
