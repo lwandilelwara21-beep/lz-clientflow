@@ -1,72 +1,101 @@
-/* CSS Variables - Design tokens */
+/* CSS Variables — Premium dark-first design system */
 
 :root {
-  /* Colors */
-  --color-dark-navy: #081A33;
-  --color-deep-blue: #0A2540;
-  --color-accent-blue: #2563EB;
-  --color-white: #FFFFFF;
-  --color-light-bg: #F4F7FB;
-  --color-success: #168B5B;
-  --color-warning: #D98A17;
-  --color-danger: #C83A4A;
-  
-  /* Light mode (default) */
-  --bg-primary: var(--color-white);
-  --bg-secondary: #F9FAFB;
-  --bg-tertiary: var(--color-light-bg);
-  --text-primary: #1F2937;
-  --text-secondary: #6B7280;
-  --text-tertiary: #9CA3AF;
-  --border-color: #E5E7EB;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  
-  /* Typography */
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  
-  /* Border radius */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  
-  /* Transitions */
-  --transition: all 0.2s ease;
+  /* ── Brand colors ── */
+  --color-primary:       #2563EB;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-muted: rgba(37, 99, 235, 0.14);
+  --color-soft-blue:     #60A5FA;
+
+  --color-success:       #22C55E;
+  --color-success-muted: rgba(34, 197, 94, 0.14);
+  --color-warning:       #F59E0B;
+  --color-warning-muted: rgba(245, 158, 11, 0.14);
+  --color-danger:        #EF4444;
+  --color-danger-muted:  rgba(239, 68, 68, 0.14);
+
+  /* ── Light mode surfaces ── */
+  --bg-app:      #F1F5F9;
+  --bg-sidebar:  #FFFFFF;
+  --bg-surface:  #FFFFFF;
+  --bg-elevated: #F8FAFC;
+  --bg-input:    #FFFFFF;
+  --bg-hover:    rgba(0, 0, 0, 0.04);
+
+  --text-primary:   #0F172A;
+  --text-secondary: #475569;
+  --text-muted:     #94A3B8;
+
+  --border-color: rgba(15, 23, 42, 0.1);
+  --border-focus: rgba(37, 99, 235, 0.5);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 20px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+  --shadow-xl: 0 20px 40px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.06);
+
+  /* ── Spacing ── */
+  --spacing-xs:   0.25rem;   /* 4px  */
+  --spacing-sm:   0.5rem;    /* 8px  */
+  --spacing-md:   0.75rem;   /* 12px */
+  --spacing-base: 1rem;      /* 16px */
+  --spacing-lg:   1.25rem;   /* 20px */
+  --spacing-xl:   1.5rem;    /* 24px */
+  --spacing-2xl:  2rem;      /* 32px */
+  --spacing-3xl:  2.5rem;    /* 40px */
+
+  /* ── Typography ── */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --font-size-xs:   0.75rem;     /* 12px */
+  --font-size-sm:   0.8125rem;   /* 13px */
+  --font-size-base: 0.9375rem;   /* 15px */
+  --font-size-lg:   1rem;        /* 16px */
+  --font-size-xl:   1.125rem;    /* 18px */
+  --font-size-2xl:  1.25rem;     /* 20px */
+  --font-size-3xl:  1.5rem;      /* 24px */
+  --font-size-4xl:  2rem;        /* 32px */
+
+  /* ── Border radius ── */
+  --radius-sm: 0.375rem;   /* 6px  */
+  --radius-md: 0.5rem;     /* 8px  */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+
+  /* ── Transitions ── */
+  --transition: all 0.18s ease;
+  --transition-slow: all 0.3s ease;
+
+  /* ── Sidebar ── */
+  --sidebar-width: 224px;
 }
 
-/* Dark mode */
+/* ── Dark mode — Premium navy ── */
 [data-theme="dark"] {
-  --bg-primary: var(--color-deep-blue);
-  --bg-secondary: var(--color-dark-navy);
-  --bg-tertiary: #132652;
-  --text-primary: #F3F4F6;
-  --text-secondary: #D1D5DB;
-  --text-tertiary: #9CA3AF;
-  --border-color: #374151;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  --bg-app:      #07111F;
+  --bg-sidebar:  #091827;
+  --bg-surface:  #0E2238;
+  --bg-elevated: #132A43;
+  --bg-input:    #0D1F33;
+  --bg-hover:    rgba(255, 255, 255, 0.04);
+
+  --text-primary:   #F8FAFC;
+  --text-secondary: #A9B7C9;
+  --text-muted:     #5C7390;
+
+  --border-color: rgba(148, 163, 184, 0.12);
+  --border-focus: rgba(96, 165, 250, 0.5);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.7);
 }
 
-/* Prefers reduced motion */
+/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

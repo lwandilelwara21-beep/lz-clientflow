@@ -56,6 +56,23 @@ import {
 import { isStorageAvailable } from './storage.js';
 
 // ============================================
+// INLINE SVG ICONS (no external dependency)
+// ============================================
+
+const SVG = {
+  eye:        `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  edit:       `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+  trash:      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`,
+  userPlus:   `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>`,
+  folderPlus: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>`,
+  creditCard: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+  search:     `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+  download:   `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+  upload:     `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+  refresh:    `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`,
+};
+
+// ============================================
 // APPLICATION STATE
 // ============================================
 
@@ -103,12 +120,10 @@ export function initApp() {
 function setupTheme() {
   const settings = appState.getSettings();
   let darkMode = settings.darkMode;
-
-  // If not set, use system preference
-  if (darkMode === null) {
-    darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  // Default to dark mode for the premium experience
+  if (darkMode === null || darkMode === undefined) {
+    darkMode = true;
   }
-
   applyTheme(darkMode);
   updateThemeToggle(darkMode);
 }
@@ -131,10 +146,13 @@ function applyTheme(isDark) {
  */
 function updateThemeToggle(isDark) {
   const toggle = document.querySelector('.theme-toggle');
-  if (toggle) {
-    toggle.setAttribute('aria-pressed', isDark.toString());
-    toggle.textContent = isDark ? '☀️' : '🌙';
-  }
+  if (!toggle) return;
+  toggle.setAttribute('aria-pressed', isDark.toString());
+  const sunSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+  const moonSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+  toggle.innerHTML = isDark
+    ? `${sunSvg}<span>Light Mode</span>`
+    : `${moonSvg}<span>Dark Mode</span>`;
 }
 
 /**
@@ -164,23 +182,30 @@ function setupEventListeners() {
   }
 
   // Mobile menu toggle
-  const sidebarToggle = document.querySelector('.sidebar-toggle');
-  const sidebar = document.querySelector('aside');
+  const sidebarToggle = document.querySelector('#sidebar-toggle');
+  const sidebar = document.querySelector('#sidebar');
   if (sidebarToggle && sidebar) {
     sidebarToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      sidebarToggle.setAttribute(
-        'aria-expanded',
-        sidebar.classList.contains('open').toString()
-      );
+      const isOpen = sidebar.classList.toggle('open');
+      sidebarToggle.setAttribute('aria-expanded', isOpen.toString());
     });
 
-    // Close sidebar when navigation item is clicked
+    // Close sidebar when a nav item is clicked on mobile
     sidebar.querySelectorAll('[data-view]').forEach(btn => {
       btn.addEventListener('click', () => {
         sidebar.classList.remove('open');
         sidebarToggle.setAttribute('aria-expanded', 'false');
       });
+    });
+
+    // Close on backdrop click
+    document.addEventListener('click', (e) => {
+      if (sidebar.classList.contains('open')
+          && !sidebar.contains(e.target)
+          && e.target !== sidebarToggle) {
+        sidebar.classList.remove('open');
+        sidebarToggle.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 
@@ -335,13 +360,13 @@ function renderDashboard() {
   quickActions.className = 'quick-actions';
   quickActions.innerHTML = `
     <button class="btn btn-primary" data-action="add-client">
-      <span>+ Add Client</span>
+      ${SVG.userPlus} Add Client
     </button>
     <button class="btn btn-primary" data-action="add-project">
-      <span>+ Add Project</span>
+      ${SVG.folderPlus} Add Project
     </button>
-    <button class="btn btn-outline" data-action="record-payment">
-      <span>💰 Record Payment</span>
+    <button class="btn btn-secondary" data-action="record-payment">
+      ${SVG.creditCard} Record Payment
     </button>
   `;
   dashboard.appendChild(quickActions);
@@ -579,7 +604,7 @@ function renderClientsView() {
       <h1>Clients</h1>
       <p class="text-muted">Manage your clients and their information</p>
     </div>
-    <button class="btn btn-primary" data-action="add-client">+ Add New Client</button>
+    <button class="btn btn-primary" data-action="add-client">${SVG.userPlus} Add Client</button>
   `;
   clientsView.appendChild(header);
 
@@ -588,8 +613,8 @@ function renderClientsView() {
   toolbar.className = 'toolbar';
   toolbar.innerHTML = `
     <div class="search-box">
+      <span class="search-icon">${SVG.search}</span>
       <input type="text" class="search-input" placeholder="Search clients by name, email, or phone..." aria-label="Search clients">
-      <span class="search-icon">🔍</span>
     </div>
     <div class="filter-controls">
       <select class="filter-select" data-filter="sort" aria-label="Sort clients">
@@ -641,9 +666,9 @@ function renderClientsView() {
                 <span class="badge">${projectCount}</span>
               </div>
               <div class="td actions">
-                <button class="btn btn-sm btn-outline" data-action="view-client" aria-label="View client">👁️</button>
-                <button class="btn btn-sm btn-outline" data-action="edit-client" aria-label="Edit client">✏️</button>
-                <button class="btn btn-sm btn-outline btn-danger" data-action="delete-client" aria-label="Delete client">🗑️</button>
+                <button class="btn btn-ghost btn-icon" data-action="view-client" aria-label="View client" title="View">${SVG.eye}</button>
+                <button class="btn btn-ghost btn-icon" data-action="edit-client" aria-label="Edit client" title="Edit">${SVG.edit}</button>
+                <button class="btn btn-ghost btn-icon btn-icon-danger" data-action="delete-client" aria-label="Delete client" title="Delete">${SVG.trash}</button>
               </div>
             </div>
           `;
@@ -751,9 +776,9 @@ function updateClientsTable(container, clients, state) {
           <span class="badge">${projectCount}</span>
         </div>
         <div class="td actions">
-          <button class="btn btn-sm btn-outline" data-action="view-client" aria-label="View client">👁️</button>
-          <button class="btn btn-sm btn-outline" data-action="edit-client" aria-label="Edit client">✏️</button>
-          <button class="btn btn-sm btn-outline btn-danger" data-action="delete-client" aria-label="Delete client">🗑️</button>
+          <button class="btn btn-ghost btn-icon" data-action="view-client" aria-label="View client" title="View">${SVG.eye}</button>
+          <button class="btn btn-ghost btn-icon" data-action="edit-client" aria-label="Edit client" title="Edit">${SVG.edit}</button>
+          <button class="btn btn-ghost btn-icon btn-icon-danger" data-action="delete-client" aria-label="Delete client" title="Delete">${SVG.trash}</button>
         </div>
       </div>
     `;
@@ -785,7 +810,7 @@ function renderProjectsView() {
       <h1>Projects</h1>
       <p class="text-muted">Manage projects, deadlines, and progress</p>
     </div>
-    <button class="btn btn-primary" data-action="add-project">+ Add New Project</button>
+    <button class="btn btn-primary" data-action="add-project">${SVG.folderPlus} Add Project</button>
   `;
   projectsView.appendChild(header);
 
@@ -796,8 +821,8 @@ function renderProjectsView() {
 
   toolbar.innerHTML = `
     <div class="search-box">
+      <span class="search-icon">${SVG.search}</span>
       <input type="text" class="search-input" placeholder="Search projects..." aria-label="Search projects">
-      <span class="search-icon">🔍</span>
     </div>
     <div class="filter-controls">
       <select class="filter-select" data-filter="status" aria-label="Filter by status">
@@ -917,9 +942,9 @@ function renderProjectsCards(container, projects, state) {
           </div>
         </div>
         <div class="card-footer">
-          <button class="btn btn-sm btn-outline" data-action="view-project">View</button>
-          <button class="btn btn-sm btn-outline" data-action="edit-project">Edit</button>
-          <button class="btn btn-sm btn-outline btn-danger" data-action="delete-project">Delete</button>
+          <button class="btn btn-ghost" data-action="view-project">Details</button>
+          <button class="btn btn-ghost" data-action="edit-project">${SVG.edit} Edit</button>
+          <button class="btn btn-ghost btn-icon-danger" data-action="delete-project">${SVG.trash}</button>
         </div>
       </div>
     `;
@@ -1009,7 +1034,7 @@ function renderPaymentsView() {
       <h1>Payments</h1>
       <p class="text-muted">Track all deposits and payments</p>
     </div>
-    <button class="btn btn-primary" data-action="record-payment">+ Record Payment</button>
+    <button class="btn btn-primary" data-action="record-payment">${SVG.creditCard} Record Payment</button>
   `;
   paymentsView.appendChild(header);
 
@@ -1075,8 +1100,8 @@ function renderPaymentsView() {
               <div class="td" data-label="Method">${payment.method}</div>
               <div class="td" data-label="Reference">${escapeHtml(payment.reference || '-')}</div>
               <div class="td actions">
-                <button class="btn btn-sm btn-outline" data-action="edit-payment" aria-label="Edit payment">✏️</button>
-                <button class="btn btn-sm btn-outline btn-danger" data-action="delete-payment" aria-label="Delete payment">🗑️</button>
+                <button class="btn btn-ghost btn-icon" data-action="edit-payment" aria-label="Edit payment" title="Edit">${SVG.edit}</button>
+                <button class="btn btn-ghost btn-icon btn-icon-danger" data-action="delete-payment" aria-label="Delete payment" title="Delete">${SVG.trash}</button>
               </div>
             </div>
           `;
@@ -1156,25 +1181,25 @@ function renderCalendarView() {
 
   // Overdue section
   if (overdue.length > 0) {
-    const overdueSection = createDeadlineSection('🚨 Overdue', overdue, 'danger', projects);
+    const overdueSection = createDeadlineSection('Overdue', overdue, 'danger', projects);
     sections.appendChild(overdueSection);
   }
 
   // Due today
   if (dueToday.length > 0) {
-    const todaySection = createDeadlineSection('📌 Due Today', dueToday, 'warning', projects);
+    const todaySection = createDeadlineSection('Due Today', dueToday, 'warning', projects);
     sections.appendChild(todaySection);
   }
 
   // Due this week
   if (dueThisWeek.length > 0) {
-    const weekSection = createDeadlineSection('📅 Due This Week', dueThisWeek, 'info', projects);
+    const weekSection = createDeadlineSection('Due This Week', dueThisWeek, 'info', projects);
     sections.appendChild(weekSection);
   }
 
   // Upcoming
   if (upcoming.length > 0) {
-    const upcomingSection = createDeadlineSection('📋 Upcoming (Next 30 Days)', upcoming, '', projects);
+    const upcomingSection = createDeadlineSection('Upcoming — Next 30 Days', upcoming, '', projects);
     sections.appendChild(upcomingSection);
   }
 
@@ -1333,7 +1358,7 @@ function renderReportsView() {
     </div>
     <div class="card-body">
       <p>Generate and download a detailed data report:</p>
-      <button class="btn btn-outline" data-action="download-report">📥 Download Report</button>
+      <button class="btn btn-secondary" data-action="download-report">${SVG.download} Download Report</button>
     </div>
   `;
   reportsView.appendChild(exportSection);
@@ -1464,22 +1489,22 @@ function renderSettingsView() {
         <h3>Export & Import</h3>
         <p class="text-muted">Back up your data or migrate to another browser/device.</p>
         <div class="settings-buttons">
-          <button class="btn btn-outline" data-action="export-json">📤 Export as JSON</button>
-          <button class="btn btn-outline" data-action="export-csv">📊 Export Projects as CSV</button>
-          <button class="btn btn-outline" data-action="import-json">📥 Import from JSON</button>
+          <button class="btn btn-secondary" data-action="export-json">${SVG.download} Export as JSON</button>
+          <button class="btn btn-secondary" data-action="export-csv">${SVG.download} Export as CSV</button>
+          <button class="btn btn-secondary" data-action="import-json">${SVG.upload} Import from JSON</button>
         </div>
       </div>
       
       <div class="settings-group">
         <h3>Demo Data</h3>
         <p class="text-muted">Load sample data to explore the application features.</p>
-        <button class="btn btn-outline" data-action="load-demo">🎯 Load Demo Data</button>
+        <button class="btn btn-secondary" data-action="load-demo">${SVG.refresh} Load Demo Data</button>
       </div>
       
       <div class="settings-group danger">
         <h3>Reset Application</h3>
         <p class="text-muted">Permanently delete all data and start fresh.</p>
-        <button class="btn btn-danger" data-action="reset-data">🗑️ Reset All Data</button>
+        <button class="btn btn-danger" data-action="reset-data">${SVG.trash} Reset All Data</button>
       </div>
     </div>
   `;
@@ -1605,11 +1630,12 @@ function openClientDetails(clientId) {
   const footer = document.createElement('div');
   footer.className = 'modal-footer';
   footer.innerHTML = `
-    <button class="btn btn-outline" data-action="close-modal">Close</button>
+    <button class="btn btn-secondary" data-action="close-modal">Close</button>
     <button class="btn btn-primary" data-action="edit-modal">Edit Client</button>
   `;
-  modal.appendChild(footer);
+  modal.querySelector('.modal-content').appendChild(footer);
 
+  footer.querySelector('[data-action="close-modal"]').addEventListener('click', () => closeModal(modal));
   footer.querySelector('[data-action="edit-modal"]').addEventListener('click', () => {
     closeModal(modal);
     currentClientEditingId = clientId;
@@ -1755,11 +1781,12 @@ function openProjectDetails(projectId) {
   const footer = document.createElement('div');
   footer.className = 'modal-footer';
   footer.innerHTML = `
-    <button class="btn btn-outline" data-action="close-modal">Close</button>
+    <button class="btn btn-secondary" data-action="close-modal">Close</button>
     <button class="btn btn-primary" data-action="edit-modal">Edit Project</button>
   `;
-  modal.appendChild(footer);
+  modal.querySelector('.modal-content').appendChild(footer);
 
+  footer.querySelector('[data-action="close-modal"]').addEventListener('click', () => closeModal(modal));
   footer.querySelector('[data-action="edit-modal"]').addEventListener('click', () => {
     closeModal(modal);
     currentEditingId = projectId;
@@ -1894,12 +1921,12 @@ function openClientModal(clientId = null) {
   const footer = document.createElement('div');
   footer.className = 'modal-footer';
   footer.innerHTML = `
-    <button class="btn btn-outline" data-action="cancel-modal">Cancel</button>
+    <button class="btn btn-secondary" data-action="cancel-modal">Cancel</button>
     <button class="btn btn-primary" data-action="submit-client-form">
-      ${isEdit ? 'Save Changes' : 'Add Client'}
+      ${isEdit ? 'Update Client' : 'Save Client'}
     </button>
   `;
-  modal.appendChild(footer);
+  modal.querySelector('.modal-content').appendChild(footer);
 
   // Event listeners
   footer.querySelector('[data-action="submit-client-form"]').addEventListener('click', () => {
@@ -2147,12 +2174,12 @@ function openProjectModal(projectId = null) {
   const footer = document.createElement('div');
   footer.className = 'modal-footer';
   footer.innerHTML = `
-    <button class="btn btn-outline" data-action="cancel-modal">Cancel</button>
+    <button class="btn btn-secondary" data-action="cancel-modal">Cancel</button>
     <button class="btn btn-primary" data-action="submit-project-form">
-      ${isEdit ? 'Save Changes' : 'Add Project'}
+      ${isEdit ? 'Update Project' : 'Create Project'}
     </button>
   `;
-  modal.appendChild(footer);
+  modal.querySelector('.modal-content').appendChild(footer);
 
   // Event listeners
   footer.querySelector('[data-action="submit-project-form"]').addEventListener('click', () => {
@@ -2298,10 +2325,10 @@ function openPaymentModal(projectId = null) {
   const footer = document.createElement('div');
   footer.className = 'modal-footer';
   footer.innerHTML = `
-    <button class="btn btn-outline" data-action="cancel-modal">Cancel</button>
+    <button class="btn btn-secondary" data-action="cancel-modal">Cancel</button>
     <button class="btn btn-primary" data-action="submit-payment-form">Record Payment</button>
   `;
-  modal.appendChild(footer);
+  modal.querySelector('.modal-content').appendChild(footer);
 
   // Event listeners
   footer.querySelector('[data-action="submit-payment-form"]').addEventListener('click', () => {
