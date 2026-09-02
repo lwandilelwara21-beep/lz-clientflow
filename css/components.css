@@ -36,6 +36,19 @@
 
 .btn svg { flex-shrink: 0; }
 
+.loading-spinner {
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Primary */
 .btn-primary {
   background-color: var(--color-primary);

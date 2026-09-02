@@ -54,6 +54,7 @@ import {
   generateDataReport
 } from './export.js';
 import { isStorageAvailable } from './storage.js';
+import { dispatchClientWebhook } from './webhook.js';
 
 // ============================================
 // INLINE SVG ICONS (no external dependency)
@@ -1816,6 +1817,7 @@ function openClientModal(clientId = null) {
   const modal = createModal(isEdit ? 'Edit Client' : 'Add New Client');
   const form = document.createElement('form');
   form.className = 'client-form';
+  form.noValidate = true;
 
   const formData = client ? deepClone(client) : {
     fullName: '',
@@ -1920,32 +1922,51 @@ function openClientModal(clientId = null) {
 
   const footer = document.createElement('div');
   footer.className = 'modal-footer';
+  const formId = `client-form-${Date.now()}`;
+  form.id = formId;
   footer.innerHTML = `
     <button class="btn btn-secondary" data-action="cancel-modal">Cancel</button>
-    <button class="btn btn-primary" data-action="submit-client-form">
+    <button class="btn btn-primary" type="submit" form="${formId}" data-action="submit-client-form">
       ${isEdit ? 'Update Client' : 'Save Client'}
     </button>
   `;
   modal.querySelector('.modal-content').appendChild(footer);
 
   // Event listeners
-  footer.querySelector('[data-action="submit-client-form"]').addEventListener('click', () => {
-    const formInputs = {
-      fullName: form.querySelector('[name="fullName"]').value,
-      businessName: form.querySelector('[name="businessName"]').value,
-      email: form.querySelector('[name="email"]').value,
-      phone: form.querySelector('[name="phone"]').value,
-      whatsapp: form.querySelector('[name="whatsapp"]').value,
-      location: form.querySelector('[name="location"]').value,
-      preferredContact: form.querySelector('[name="preferredContact"]').value,
-      notes: form.querySelector('[name="notes"]').value
-    };
+  form.addEventListener('submit', (event) => handleClientFormSubmit(
+    event,
+    { form, modal, footer, isEdit, clientId }
+  ));
 
+  footer.querySelector('[data-action="cancel-modal"]').addEventListener('click', () => {
+    closeModal(modal);
+  });
+
+  showModal(modal);
+}
+
+/**
+ * Validate, persist, and automate a client/lead form submission.
+ * @param {SubmitEvent} event - Form submit event
+ * @param {Object} context - Form submission context
+ */
+async function handleClientFormSubmit(event, { form, modal, footer, isEdit, clientId }) {
+  event.preventDefault();
+  const submitButton = footer.querySelector('[data-action="submit-client-form"]');
+
+  try {
+    const formInputs = Object.fromEntries(new FormData(form).entries());
     const validation = validateClient(formInputs);
+    clearFormErrors(form);
+
     if (!validation.valid) {
       displayFormErrors(form, validation.errors);
+      error('Please correct the highlighted fields');
       return;
     }
+
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="loading-spinner" aria-hidden="true"></span> Submitting...';
 
     let result;
     if (isEdit) {
@@ -1954,21 +1975,35 @@ function openClientModal(clientId = null) {
       result = appState.addClient(formInputs);
     }
 
-    if (result.success) {
-      closeModal(modal);
-      success(isEdit ? `${formInputs.fullName} updated` : `${formInputs.fullName} added`);
-    } else if (result.isDuplicate) {
-      warning(result.error);
-    } else {
-      error(result.error);
+    if (!result.success) {
+      if (result.isDuplicate) {
+        warning(result.error);
+      } else {
+        error(result.error || 'Unable to save client');
+      }
+      return;
     }
-  });
 
-  footer.querySelector('[data-action="cancel-modal"]').addEventListener('click', () => {
+    try {
+      await dispatchClientWebhook({
+        event: isEdit ? 'client.updated' : 'client.created',
+        client: result.client,
+        submittedAt: new Date().toISOString()
+      });
+      success(isEdit ? `${formInputs.fullName} updated and sent to automation` : `${formInputs.fullName} added and sent to automation`);
+    } catch (webhookError) {
+      console.error('Client webhook dispatch failed:', webhookError);
+      warning(`${formInputs.fullName} was saved locally, but automation could not be reached`);
+    }
+
     closeModal(modal);
-  });
-
-  showModal(modal);
+  } catch (submissionError) {
+    console.error('Client form submission failed:', submissionError);
+    error('Unable to submit client form. Please try again.');
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = isEdit ? 'Update Client' : 'Save Client';
+  }
 }
 
 // ============================================
@@ -2477,68 +2512,66 @@ function handleExportCSV() {
  * Handle JSON import
  */
 async function handleImportJSON(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  try {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const result = await importFromFile(file);
-  if (!result.success) return;
+    const result = await importFromFile(file);
+    if (!result.success) return;
 
-  const validation = validateImportData(result.data);
-  if (!validation.valid) {
-    validation.errors.forEach(err => error(err));
-    return;
+    const validation = validateImportData(result.data);
+    if (!validation.valid) {
+      validation.errors.forEach(err => error(err));
+      return;
+    }
+
+    if (validation.warnings.length > 0) {
+      validation.warnings.forEach(warn => warning(warn));
+    }
+
+    const shouldImport = confirm(
+      `Import ${result.data.clients.length} clients and ${result.data.projects.length} projects?\n\nThis will replace your current data.`
+    );
+
+    if (shouldImport) {
+      appState.importState(result.data);
+      success('Data imported successfully');
+    }
+  } catch (importError) {
+    console.error('Import error:', importError);
+    error('Failed to import data. Please try again.');
+  } finally {
+    e.target.value = '';
   }
-
-  if (validation.warnings.length > 0) {
-    validation.warnings.forEach(warn => warning(warn));
-  }
-
-  const shouldImport = confirm(
-    `Import ${result.data.clients.length} clients and ${result.data.projects.length} projects?\n\nThis will replace your current data.`
-  );
-
-  if (shouldImport) {
-    appState.importState(result.data);
-    success('Data imported successfully');
-  }
-
-  // Reset input
-  e.target.value = '';
 }
 
 /**
  * Load demo data
  */
-function loadDemoData() {
+async function loadDemoData() {
   const shouldLoad = confirm(
     'Load demo data? This will add sample clients and projects to help you explore the application.\n\nYour existing data will not be deleted.'
   );
 
   if (!shouldLoad) return;
 
-  fetch('./data/demo-data.json')
-    .then(response => {
-      if (!response.ok) throw new Error('Failed to load demo data');
-      return response.json();
-    })
-    .then(demoData => {
-      // Merge demo data with existing data
-      const currentState = appState.getFullState();
-      
-      const mergedState = {
-        ...currentState,
-        clients: [...currentState.clients, ...demoData.clients],
-        projects: [...currentState.projects, ...demoData.projects],
-        payments: [...currentState.payments, ...demoData.payments]
-      };
+  try {
+    const response = await fetch('./data/demo-data.json');
+    if (!response.ok) throw new Error('Failed to load demo data');
+    const demoData = await response.json();
+    const currentState = appState.getFullState();
 
-      appState.importState(mergedState);
-      success(`Demo data loaded: ${demoData.clients.length} clients, ${demoData.projects.length} projects`);
-    })
-    .catch(err => {
-      error('Failed to load demo data: ' + err.message);
-      console.error('Demo data error:', err);
+    appState.importState({
+      ...currentState,
+      clients: [...currentState.clients, ...demoData.clients],
+      projects: [...currentState.projects, ...demoData.projects],
+      payments: [...currentState.payments, ...demoData.payments]
     });
+    success(`Demo data loaded: ${demoData.clients.length} clients, ${demoData.projects.length} projects`);
+  } catch (demoError) {
+    error('Failed to load demo data: ' + demoError.message);
+    console.error('Demo data error:', demoError);
+  }
 }
 
 /**

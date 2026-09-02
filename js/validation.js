@@ -20,9 +20,20 @@ import { isValidEmail, isValidPhone } from './utils.js';
 export function validateClient(data) {
   const errors = {};
 
+  const fullName = typeof data.fullName === 'string' ? data.fullName.trim() : '';
+  const businessName = typeof data.businessName === 'string' ? data.businessName.trim() : '';
+  const location = typeof data.location === 'string' ? data.location.trim() : '';
+  const notes = typeof data.notes === 'string' ? data.notes.trim() : '';
+
   // Name is required
-  if (!data.fullName || !data.fullName.trim()) {
+  if (!fullName) {
     errors.fullName = 'Full name is required';
+  } else if (fullName.length > 120) {
+    errors.fullName = 'Full name must be 120 characters or fewer';
+  }
+
+  if (businessName.length > 160) {
+    errors.businessName = 'Business name must be 160 characters or fewer';
   }
 
   // Email validation
@@ -38,6 +49,18 @@ export function validateClient(data) {
   // WhatsApp validation
   if (data.whatsapp && !isValidPhone(data.whatsapp)) {
     errors.whatsapp = 'WhatsApp number must be at least 10 digits';
+  }
+
+  if (location.length > 120) {
+    errors.location = 'Location must be 120 characters or fewer';
+  }
+
+  if (data.preferredContact && !['Email', 'Phone', 'WhatsApp'].includes(data.preferredContact)) {
+    errors.preferredContact = 'Please select a valid contact method';
+  }
+
+  if (notes.length > 2000) {
+    errors.notes = 'Notes must be 2,000 characters or fewer';
   }
 
   return {
